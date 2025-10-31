@@ -1,0 +1,2098 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chakupe - Fresh Pricing</title>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* Estilos generales */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #D6D6D6;
+            line-height: 1.6;
+            margin: 0;
+            padding: 10px 0;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #F3F3F3;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        /* === ZOOM MODAL === */
+        .modal-zoom {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.95);
+            justify-content: center;
+            align-items: center;
+            cursor: zoom-out;
+            backdrop-filter: blur(5px);
+        }
+        .zoomed-image {
+            max-width: 95%;
+            max-height: 95vh;
+            object-fit: contain;
+            border: 3px solid white;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease;
+        }
+        .close-zoom {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 2001;
+            background: rgba(0,0,0,0.5);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .close-zoom:hover {
+            background: rgba(255,255,255,0.2);
+            transform: rotate(90deg);
+        }
+        
+        /* Modal Login/Register */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+        }
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            position: relative;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #999;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .close-modal:hover {
+            color: #333;
+            background: #f0f0f0;
+            transform: rotate(90deg);
+        }
+        .modal-header {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 25px;
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #333;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+        }
+        .btn-secondary {
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            color: white;
+            margin-top: 15px;
+            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+        }
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+        }
+        
+        /* User Info Bar */
+        .user-bar {
+            background: linear-gradient(135deg, #313533, #1a1c1b);
+            padding: 12px 20px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .user-info {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .logout-btn {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .logout-btn:hover {
+            background: white;
+            color: #313533;
+            transform: translateY(-1px);
+        }
+        
+        /* Header */
+        .header {
+            background: #F3F3F3;
+            padding: 25px 20px;
+            text-align: center;
+        }
+        .brand-name {
+            font-size: 28px;
+            font-weight: 300;
+            letter-spacing: 4px;
+            color: #333;
+            margin-bottom: 6px;
+        }
+        .brand-tagline {
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: #666;
+            font-weight: 300;
+        }
+        
+        /* Main Title Section */
+        .title-section {
+            background: #F3F3F3;
+            padding: 30px 20px 25px;
+            text-align: center;
+        }
+        .main-title {
+            font-size: 26px;
+            font-weight: 400;
+            letter-spacing: 3px;
+            color: #313533;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+        
+        /* CTA Button */
+        .cta-section {
+            background: #F3F3F3;
+            padding: 20px 30px 30px;
+            text-align: center;
+        }
+        .cta-button {
+            display: inline-block;
+            padding: 14px 25px;
+            border: 2px solid #313533;
+            background: #F3F3F3;
+            color: #313533;
+            text-decoration: none;
+            letter-spacing: 1px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            border-radius: 25px;
+        }
+        .cta-button:hover {
+            background: #313533;
+            color: #F3F3F3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(49, 53, 51, 0.3);
+        }
+        
+        /* Category Header */
+        .category-header {
+            background: linear-gradient(135deg, #313533, #1a1c1b);
+            padding: 30px 25px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .category-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.03)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.03)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            pointer-events: none;
+        }
+        .category-header.light {
+            background: linear-gradient(135deg, #b3912e, #8b7323);
+        }
+        .category-title {
+            font-size: 24px;
+            font-weight: 400;
+            letter-spacing: 2px;
+            color: #F3F3F3;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+        }
+        .category-description {
+            font-size: 14px;
+            color: #F3F3F3;
+            line-height: 1.5;
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Product Row - MANTENIENDO EL MISMO DISEÑO EN MÓVIL */
+        .product-row {
+            background: #F3F3F3;
+            padding: 15px;
+            display: table;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+        .product-row:hover {
+            background: #f8f8f8;
+        }
+        .product-row.dark {
+            background: #313533;
+        }
+        .product-row.dark:hover {
+            background: #3a3e3c;
+        }
+        .product-content {
+            display: table-row;
+        }
+        .product-text {
+            display: table-cell;
+            vertical-align: middle;
+            padding: 20px;
+            width: 55%;
+        }
+        .product-text.right {
+            text-align: right;
+        }
+        .product-image-cell {
+            display: table-cell;
+            vertical-align: middle;
+            width: 45%;
+            padding: 0 15px;
+        }
+        .product-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin-bottom: 10px;
+            cursor: zoom-in;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .product-image:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+        }
+        .product-name {
+            font-size: 20px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            color: #313533;
+            margin-bottom: 12px;
+        }
+        .product-row.dark .product-name {
+            color: #F3F3F3;
+        }
+        .product-desc {
+            font-size: 15px;
+            color: #313533;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+        .product-row.dark .product-desc {
+            color: #F3F3F3;
+        }
+        .product-price {
+            font-size: 18px;
+            color: #454b47;
+            font-weight: 500;
+            margin-bottom: 12px;
+            display: block;
+            text-align: center;
+        }
+        .product-row.dark .product-price {
+            color: #F3F3F3;
+        }
+        .add-to-cart-btn {
+            background: linear-gradient(135deg, #5A5A5A, #404040);
+            color: white;
+            border: none;
+            display: block;
+            width: fit-content;
+            margin: 12px auto;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 3px 12px rgba(90, 90, 90, 0.3);
+        }
+        .add-to-cart-btn:hover {
+            background: linear-gradient(135deg, #404040, #303030);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 18px rgba(90, 90, 90, 0.4);
+        }
+        
+        /* Radio buttons personalizados */
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            transition: background-color 0.2s ease;
+            margin-bottom: 6px;
+        }
+        .radio-option:hover {
+            background-color: rgba(0,0,0,0.05);
+        }
+        .product-row.dark .radio-option:hover {
+            background-color: rgba(255,255,255,0.05);
+        }
+        .radio-option input[type="radio"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+        .radio-option span {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        /* === CONTROLES DE CANTIDAD MEJORADOS === */
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            margin: 15px 0;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            background: white;
+            max-width: 160px;
+            margin-left: auto;
+            margin-right: auto;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .qty-btn {
+            background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+            color: #495057;
+            border: none;
+            width: 45px;
+            height: 45px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .qty-btn:hover {
+            background: linear-gradient(145deg, #e9ecef, #dee2e6);
+            transform: scale(1.05);
+        }
+        
+        .qty-btn:active {
+            transform: scale(0.95);
+            background: linear-gradient(145deg, #dee2e6, #ced4da);
+        }
+        
+        .qty-btn::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(76, 175, 80, 0.2) 0%, rgba(76, 175, 80, 0) 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .qty-btn:hover::before {
+            opacity: 1;
+        }
+        
+        .qty-display {
+            background: white;
+            color: #333;
+            border: none;
+            width: 60px;
+            height: 45px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 45px;
+            border-left: 2px solid #e0e0e0;
+            border-right: 2px solid #e0e0e0;
+            min-width: 60px;
+        }
+        
+        /* === CARRITO MEJORADO === */
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f8f9fa;
+            border-radius: 20px;
+            padding: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 1px solid #e0e0e0;
+        }
+        
+        .cart-qty-btn {
+            background: linear-gradient(145deg, #6c757d, #5a6268);
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .cart-qty-btn:hover {
+            background: linear-gradient(145deg, #5a6268, #495057);
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+        }
+        
+        .cart-qty-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        
+        .cart-qty-display {
+            background: white;
+            color: #333;
+            border: none;
+            width: 40px;
+            height: 32px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 32px;
+            border-radius: 16px;
+            margin: 0 4px;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        /* === BOTÓN ELIMINAR MEJORADO === */
+        .delete-btn {
+            background: linear-gradient(145deg, #dc3545, #c82333);
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+            position: relative;
+        }
+        
+        .delete-btn:hover {
+            background: linear-gradient(145deg, #c82333, #bd2130);
+            transform: translateY(-1px) rotate(5deg);
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+        }
+        
+        .delete-btn:active {
+            transform: translateY(0) rotate(0deg);
+            box-shadow: 0 1px 4px rgba(220, 53, 69, 0.3);
+        }
+        
+        .delete-btn::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .delete-btn:hover::before {
+            opacity: 1;
+        }
+        
+        /* Cart Float Button */
+        .cart-float {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: linear-gradient(135deg, #4d4d4d, #333333);
+            color: white;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.3);
+            z-index: 999;
+            transition: all 0.3s ease;
+            font-size: 20px;
+        }
+        .cart-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 22px rgba(0,0,0,0.4);
+        }
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: linear-gradient(135deg, #f44336, #d32f2f);
+            color: white;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            box-shadow: 0 2px 6px rgba(244, 67, 54, 0.4);
+        }
+        
+        /* Cart Modal */
+        .cart-items {
+            max-height: 350px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            transition: all 0.3s ease;
+            gap: 12px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            background: #fafafa;
+        }
+        
+        .cart-item:hover {
+            background: #f0f0f0;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+        }
+        
+        .cart-item-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 10px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .cart-item-info {
+            flex: 1;
+        }
+        
+        .cart-item-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+            font-size: 13px;
+        }
+        
+        .cart-item-price {
+            font-size: 11px;
+            color: #666;
+        }
+        
+        .cart-item-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .cart-item-total {
+            font-weight: 700;
+            color: #333;
+            font-size: 13px;
+            text-align: right;
+        }
+        
+        .cart-total {
+            font-size: 18px;
+            font-weight: 700;
+            text-align: right;
+            margin: 20px 0;
+            color: #333;
+            padding-top: 15px;
+            border-top: 2px solid #eee;
+        }
+        
+        /* WhatsApp Float */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            color: white;
+            text-decoration: none;
+            box-shadow: 0 4px 18px rgba(37, 211, 102, 0.4);
+            z-index: 998;
+            transition: all 0.3s ease;
+        }
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 22px rgba(37, 211, 102, 0.5);
+        }
+        
+        /* Contact Section */
+        .contact-section {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            text-align: center;
+            padding: 40px 15px;
+            margin-bottom: 15px;
+            max-width: 600px;
+            margin: 0 auto 15px auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.1);
+        }
+        .contact-title {
+            font-size: 26px;
+            font-weight: 300;
+            letter-spacing: 3px;
+            color: #333;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+        .contact-content {
+            margin: 0 auto;
+            max-width: 600px;
+        }
+        .contact-info h3 {
+            font-size: 20px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        .contact-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+        .contact-item i {
+            font-size: 18px;
+            color: #4CAF50;
+            margin-right: 12px;
+            width: 25px;
+            text-align: center;
+        }
+        .contact-item span,
+        .contact-item a {
+            font-size: 14px;
+            color: #333;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        .contact-item a:hover {
+            color: #4CAF50;
+        }
+        
+        /* Map */
+        .map-container {
+            background: white;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            height: 300px;
+            max-width: 600px;
+            width: 100%;
+            margin: 15px auto;
+            padding: 10px;
+            border-radius: 12px;
+            box-sizing: border-box;
+        }
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+            border-radius: 6px;
+        }
+        
+        /* Footer */
+        footer {
+            max-width: 600px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #333333, #1a1a1a);
+            color: white;
+            padding: 40px 15px;
+            text-align: center;
+            border-radius: 12px 12px 0 0;
+            margin-top: 15px;
+        }
+        footer a {
+            color: white;
+            text-decoration: underline;
+        }
+        /* Social Media Icons */
+        .social-media {
+            margin: 25px 0 15px 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .social-media a {
+            display: inline-flex;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.1);
+        }
+        .social-media a:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255,255,255,0.4);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+        }
+        .social-media a[aria-label="Facebook"]:hover {
+            background: #1877F2;
+            border-color: #1877F2;
+        }
+        .social-media a[aria-label="Instagram"]:hover {
+            background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+            border-color: #e6683c;
+        }
+        .social-media a[aria-label="WhatsApp"]:hover {
+            background: #25D366;
+            border-color: #25D366;
+        }
+        .social-media a[aria-label="Google Maps"]:hover {
+            background: #EA4335;
+            border-color: #EA4335;
+        }
+        
+        /* Scrollbar personalizado */
+        .cart-items::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .cart-items::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        .cart-items::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        
+        .cart-items::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
+        /* Animaciones adicionales */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .product-row {
+            animation: fadeIn 0.6s ease;
+        }
+        
+        /* Media queries para ajustes finos en móviles */
+        @media only screen and (max-width: 480px) {
+            .product-text {
+                width: 50%;
+                padding: 15px;
+            }
+            .product-image-cell {
+                width: 50%;
+                padding: 0 10px;
+            }
+            .product-name {
+                font-size: 16px;
+            }
+            .product-desc {
+                font-size: 12px;
+            }
+            .product-price {
+                font-size: 14px;
+            }
+            .add-to-cart-btn {
+                font-size: 11px;
+                padding: 8px 16px;
+            }
+            .quantity-controls {
+                max-width: 140px;
+            }
+            .qty-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 14px;
+            }
+            .qty-display {
+                width: 50px;
+                height: 40px;
+                font-size: 14px;
+                line-height: 40px;
+            }
+        }
+        
+        @media only screen and (max-width: 380px) {
+            .product-text {
+                width: 48%;
+                padding: 12px;
+            }
+            .product-image-cell {
+                width: 52%;
+                padding: 0 8px;
+            }
+            .brand-name {
+                font-size: 24px;
+            }
+            .main-title {
+                font-size: 22px;
+            }
+            .category-title {
+                font-size: 20px;
+            }
+        }
+        
+        /* === AJUSTES PARA PC (LETRAS MÁS GRANDES) === */
+        @media only screen and (min-width: 768px) {
+            .product-name {
+                font-size: 24px !important;
+                font-weight: 600;
+                margin-bottom: 15px;
+            }
+            .product-desc {
+                font-size: 17px !important;
+                line-height: 1.6;
+                margin-bottom: 15px;
+            }
+            .product-price {
+                font-size: 20px !important;
+                font-weight: 600;
+                margin-bottom: 15px;
+            }
+            .radio-option span {
+                font-size: 16px !important;
+            }
+            .add-to-cart-btn {
+                font-size: 14px !important;
+                padding: 12px 25px;
+            }
+        }
+        /* Estilo para la información legal en el footer */
+.legal-info {
+    font-size: 12px;
+    color: #bbb;
+    margin: 15px 0;
+    line-height: 1.6;
+    font-weight: 400;
+}
+    </style>
+</head>
+<body>
+    <!-- ZOOM MODAL -->
+    <div id="imageZoomModal" class="modal-zoom" onclick="closeZoom()">
+        <span class="close-zoom">&times;</span>
+        <img class="zoomed-image" id="zoomedImage">
+    </div>
+    
+    <!-- Auth Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="hideAuthModal()">&times;</span>
+            <div id="registerForm">
+                <h3 class="modal-header">Registrarse</h3>
+                <div class="form-group">
+                    <label>Nombre completo</label>
+                    <input type="text" id="regName" placeholder="Juan Pérez">
+                </div>
+                <div class="form-group">
+                    <label>Correo electrónico</label>
+                    <input type="email" id="regEmail" placeholder="tu@email.com">
+                </div>
+                <div class="form-group">
+                    <label>DNI</label>
+                    <input type="text" id="regDni" placeholder="12345678">
+                </div>
+                <div class="form-group">
+                    <label>Celular (WhatsApp)</label>
+                    <input type="tel" id="regPhone" placeholder="+51 999 999 999">
+                </div>
+                <button class="btn btn-primary" onclick="register()">Registrarse</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Cart Modal -->
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-header">Mi Carrito</h3>
+            <div class="cart-items" id="cartItems"></div>
+            <div class="cart-total" id="cartTotal">Total: S/. 0.00</div>
+            <button class="btn btn-primary" onclick="sendToWhatsApp()">Enviar Pedido por WhatsApp</button>
+            <button class="btn btn-secondary" onclick="closeCart()">Cerrar</button>
+        </div>
+    </div>
+    
+    <div class="email-container">
+        <!-- User Bar -->
+        <div id="userBar" class="user-bar" style="display: none;">
+            <div class="user-info">
+                Bienvenido, <span id="userName"></span>
+            </div>
+            <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+        </div>
+        
+        <!-- Header -->
+        <div class="header">
+            <div class="brand-name">CHAKUPE</div>
+            <div class="brand-tagline">LA GRAN DESPENSA MOCHE</div>
+        </div>
+        
+        <!-- Main Title -->
+        <div class="title-section">
+            <h2 class="main-title">FRESH PRICING</h2>
+        </div>
+        
+        <!-- CTA Button -->
+        <div class="cta-section">
+            <a href="carta.pdf" target="_blank" class="cta-button">VER CARTA COMPLETA DE PRECIOS</a>
+        </div>
+        
+        <!-- Category: Productos -->
+        <div class="category-header">
+            <h3 class="category-title"><strong>ALTA GAMA</strong></h3>
+            <p class="category-description">Nuestra selecta colección de productos artesanales están disponibles con los mejores precios.</p>
+        </div>
+        
+        <!-- Product 1: LA PELIRROJA -->
+        <div class="product-row">
+            <div class="product-content">
+                <div class="product-text length">
+                    <h2 class="product-name"><strong>LA PELIRROJA 375ML</strong></h2>
+                    <p class="product-desc"><strong>Cerveza de alta gama</strong>, elaborada al estilo Belga, con un carácter único y artesanal.
+                                            Es una Red Lager que combina la suavidad de la malta con la complejidad aromática de 8 variedades de lúpulos americanos y el toque exótico del mango criollo del norte del Perú, logrando un equilibrio entre frescura, amargor y dulzor frutal.
+                                            Madurada cuidadosamente en tanques de guarda y embotellada en vidrio pavonado, que protege el producto de la luz para preservar su aroma y favorecer su proceso de maduración natural.
+                                            Es una cerveza 100% natural, sin preservantes ni colorantes, elaborada con pasión, innovación y respeto por la tradición cervecera.
+                                            <br><strong>Características principales:</strong>
+                                            <br><strong>Tipo:</strong> Red Lager – Estilo Belga
+                                            <br><strong>Origen:</strong> Perú (inspiración belga, con insumos nacionales)
+                                            <br><strong>Ingredientes:</strong> Agua pura, cebada malteada, 8 lúpulos americanos, mango criollo del norte del Perú, levadura lager.
+                                            <br><strong>Color:</strong> Ámbar rojizo intenso.
+                                            <br><strong>Aroma:</strong> Frutal, con notas cítricas y leves toques de mango.
+                                            <br><strong>Sabor:</strong> Equilibrado; inicio dulce, cuerpo maltoso y final ligeramente amargo.
+                                            <br><strong>Fermentación:</strong> Baja (lager).
+                                            <br><strong>Maduración:</strong> Guarda prolongada 3 meses en tanques de acero.
+                                            <br><strong>Presentación:</strong> Botella pavonada que protege de la luz.
+                                            <br><strong>Pureza:</strong> 100% natural, sin preservantes ni colorantes.
+                    </p>
+                    <p class="product-price">Elige tu presentación:</p>
+                    <div style="display: flex; flex-direction: column; gap: 6px; margin: 8px 0;">
+                        <label class="radio-option">
+                            <input type="radio" name="peliroja-option" value="unidad" data-price="35.00">
+                            <span>Unidad (375ml) - S/. 35.00</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="peliroja-option" value="fourpack" data-price="140.00">
+                            <span>Fourpack (4 unidades) - S/. 140.00</span>
+                        </label>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCartPeliroja()">
+                        Añadir al Carrito
+                    </button>
+                </div>
+                <div class="product-image-cell">
+                    <img src="peliroja negra black (1).jpg" alt="" class="product-image" onclick="openZoom(this.src)">
+                    <img src="pelirroja fourpack (1).jpg" alt="PELIRROJA FOURPACK 375ML" class="product-image" onclick="openZoom(this.src)">
+                    <img src="pelirroja copa.jpg" alt="" class="product-image" onclick="openZoom(this.src)">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Product 2: ORO LIQUIDO -->
+        <div class="product-row dark">
+            <div class="product-content">
+                <div class="product-image-cell">
+                    <img src="oro liquido botella.jpg" alt="Oro liquido" class="product-image" onclick="openZoom(this.src)">
+                    <img src="oro liquido grupo (1).jpg" alt="Oro liquido" class="product-image" onclick="openZoom(this.src)">
+                    <img src="oro liquido copa.jpg" alt="Oro liquido" class="product-image" onclick="openZoom(this.src)">
+                </div>
+                <div class="product-text">
+                    <h3 class="product-name"><strong>ORO LIQUIDO 330ML</strong></h3>
+                    <p class="product-desc"><strong>Cerveza de alta gama</strong>, estilo Lager (rubia), de cuerpo ligero y refrescante. Elaborada con una cuidadosa selección de lúpulos americanos y cebadas malteadas alemanas, que aportan equilibrio entre aroma, sabor y suavidad.
+                                            Madurada en tanques de acero inoxidable bajo condiciones controladas, lo que garantiza pureza y estabilidad.
+                                            Es un producto 100% natural, sin preservantes ni colorantes, elaborado con dedicación artesanal y estándares de calidad premium.
+                                            <br><strong>Características principales:</strong>
+                                            <br><strong>Tipo:</strong> Lager rubia
+                                            <br><strong>Origen:</strong> (Lima – Perú)
+                                            <br><strong>Ingredientes:</strong> Agua pura, cebada malteada alemana, lúpulos americanos, levadura lager.
+                                            <br><strong>Color:</strong> Dorado brillante.
+                                            <br><strong>Aroma:</strong> Floral, con notas suaves de malta.
+                                            <br><strong>Sabor:</strong> Suave, refrescante, ligeramente amarga y equilibrada.
+                                            <br><strong>Fermentación:</strong> Baja (propia del estilo lager).
+                                            <br><strong>Maduración:</strong> Guarda en tanques de acero inoxidable.
+                                            <br><strong>Contenido natural:</strong> 100% natural, sin preservantes ni colorantes.
+                    </p>
+                    <p class="product-price">Elige tu presentación:</p>
+                    <div style="display: flex; flex-direction: column; gap: 6px; margin: 8px 0;">
+                        <label class="radio-option">
+                            <input type="radio" name="oroliquido-option" value="unidad" data-price="20.00">
+                            <span>Unidad (330ml) - S/. 20.00</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="oroliquido-option" value="sixpack" data-price="120.00">
+                            <span>Sixpack (6 unidades) - S/. 120.00</span>
+                        </label>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCartOroLiquido()">
+                        Añadir al Carrito
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Product 3: PISCO -->
+        <div class="product-row">
+            <div class="product-content">
+                <div class="product-text length">
+                    <h3 class="product-name"><strong>CHOLO NUMBER GUAN 750ML</strong></h3>
+                    <p class="product-desc"><strong>El Pisco Ensamblish</strong> es una creación exclusiva elaborada a partir de una fórmula secreta que combina 16 piscos premium ya destilados, cuidadosamente seleccionados de las regiones pisqueras del Perú: Lima, Ica, Arequipa, Moquegua y Tacna.
+                                            Cada pisco aporta su carácter único, dando como resultado un blend sofisticado, de gran equilibrio aromático y gustativo, que expresa la diversidad y excelencia del pisco peruano.
+                                            <br><strong>Características principales:</strong>
+                                            <br><strong>Tipo:</strong> Ensamblish (blend o ensamble de piscos premium).
+                                            <br><strong>Origen:</strong> Regiones pisqueras del <strong>Perú</strong> – <strong>Lima</strong>, <strong>Ica</strong>, <strong>Arequipa</strong>, <strong>Moquegua</strong> y <strong>Tacna</strong>.
+                                            <br><strong>Composición:</strong> 16 piscos seleccionados de distintas cepas de uva pisquera.
+                                            <br><strong>Proceso:</strong> Mezcla bajo fórmula secreta, afinamiento controlado y guarda.
+                                            <br><strong>Color:</strong> Transparente y brillante.
+                                            <br><strong>Aroma:</strong> Complejo, floral, frutal y equilibrado.
+                                            <br><strong>Sabor:</strong> Suave, redondo, con notas dulces y persistentes.
+                                            <br><strong>Valor cultural:</strong> Representa la unión de las tradiciones pisqueras del Perú en un solo destilado de alta gama.
+                    </p>
+                    <p class="product-price">S/. 180.00</p>
+                    <div class="quantity-controls">
+                        <button class="qty-btn" onclick="decreaseQty(3)">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <div class="qty-display" id="qty-3">1</div>
+                        <button class="qty-btn" onclick="increaseQty(3)">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCart('Cholo Number Guan 750ML', 180.00, 3, 'pisco.jpg')">
+                        Añadir al Carrito
+                    </button>
+                </div>
+                <div class="product-image-cell">
+                    <img src="pisco caja dentro.jpg" alt="pisco caja dentro" class="product-image" onclick="openZoom(this.src)">
+                    <img src="pisco.jpg" alt="pisco" class="product-image" onclick="openZoom(this.src)">
+                    <img src="pisco vaso.jpg" alt="pisco" class="product-image" onclick="openZoom(this.src)">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Product 3.5: NUK -->
+        <div class="product-row dark">
+            <div class="product-content">
+                <div class="product-image-cell">
+                    <img src="https://z-cdn-media.chatglm.cn/files/e13eab12-60ca-4144-a361-7eaf50c87c8e_nuk.jpeg?auth_key=1793426324-1c44f8fe6f1e48e8b5373a8807c162a1-0-bf743ee10f70ba37dba05c916223af20" alt="Nuk Pisco" class="product-image" onclick="openZoom(this.src)">
+                    <img src="https://z-cdn-media.chatglm.cn/files/a69e0b5c-4cbd-4bdc-bf1e-691ef87dde86_nuk1.png?auth_key=1793426324-8e07f8fe4e3d408b81a422f2e050e840-0-3ba75eb1505b3721b373c84f7f3e0e4c" alt="Nuk Pisco Copa" class="product-image" onclick="openZoom(this.src)">
+                    <img src="https://z-cdn-media.chatglm.cn/files/37b96ee3-fc0e-410a-9f5b-732bd174fdb6_nuk2.png?auth_key=1793426324-1d2cd189a1b04e8cb1557e980a03d873-0-570e8a3067e17ed694c8e459356288cf" alt="Nuk Pisco Botella" class="product-image" onclick="openZoom(this.src)">
+                </div>
+                <div class="product-text">
+                    <h3 class="product-name"><strong>NUK PISCO 9 AÑOS</strong></h3>
+                    <p class="product-desc"><strong>Nuk Pisco</strong> es una joya de la destilería peruana, un pisco premium reposado durante 9 años en barricas de roble seleccionadas.
+                                            Este tiempo de añejamiento le confiere una complejidad excepcional, con notas de vainilla, caramelo, frutos secos y un toque de madera noble que se integra perfectamente con el carácter frutal del pisco.
+                                            Cada botella representa la paciencia y dedicación de nuestros maestros destiladores, que han perfeccionado el arte del reposado para crear una experiencia única y memorable.
+                                            <br><strong>Características principales:</strong>
+                                            <br><strong>Tipo:</strong> Pisco Reposado Premium
+                                            <br><strong>Añejamiento:</strong> 9 años en barricas de roble
+                                            <br><strong>Origen:</strong> Valle de Ica, Perú
+                                            <br><strong>Color:</strong> Dorado ámbar con reflejos cobrizos
+                                            <br><strong>Aroma:</strong> Complejo, con notas de vainilla, caramelo, frutos secos y madera
+                                            <br><strong>Sabor:</strong> Suave y redondo, con final persistente y elegante
+                                            <br><strong>Presentación:</strong> Botella elegante de 750ml con diseño exclusivo
+                                            <br><strong>Graduación:</strong> 40% vol.
+                    </p>
+                    <p class="product-price">S/. 250.00</p>
+                    <div class="quantity-controls">
+                        <button class="qty-btn" onclick="decreaseQty(15)">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <div class="qty-display" id="qty-15">1</div>
+                        <button class="qty-btn" onclick="increaseQty(15)">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCart('Nuk Pisco 9 Años', 250.00, 15, 'https://z-cdn-media.chatglm.cn/files/e13eab12-60ca-4144-a361-7eaf50c87c8e_nuk.jpeg?auth_key=1793426324-1c44f8fe6f1e48e8b5373a8807c162a1-0-bf743ee10f70ba37dba05c916223af20')">
+                        Añadir al Carrito
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Product 4: VINAGRE -->
+        <div class="product-row">
+            <div class="product-content">
+                <div class="product-text length">
+                    <h4 class="product-name"><strong>VINAGRE EL DANDY</strong></h4>
+                    <p class="product-desc"><strong>Vinagre el Dandy</strong> 100% elaborado a partir de uva variedad Italia, la misma cepa con la que se produce el reconocido Pisco peruano.
+                                            Obtenido mediante la fermentación natural del vino de uva Italia, utilizando el proceso clásico de goteo y un añejado mínimo de dos años en barricas, lo que le otorga un carácter fino y equilibrado.
+                                            <br><strong>Características:</strong>
+                                            <br><strong>Origen:</strong> Ica – Perú
+                                            <br><strong>Materia prima:</strong> Uva blanca Italia (Vitis vinifera)
+                                            <br><strong>Color:</strong> Ámbar dorado
+                                            <br><strong>Aroma:</strong> Floral y afrutado, con notas suaves de vino blanco maduro.
+                                            <br><strong>Sabor:</strong> Ácido delicado, con toques dulces y elegantes.
+                                            <br><strong>Textura:</strong> Líquido brillante y cristalino.
+                                            <br><strong>Proceso:</strong> Fermentación natural de goteo y añejamiento de 2 años.
+                                            <br><strong>Valor cultural:</strong> Representa la paciencia, tradición y elegancia del arte vitivinícola iqueño.
+                    </p>
+                    <p class="product-price">Elige tu presentación:</p>
+                    <div style="display: flex; flex-direction: column; gap: 6px; margin: 8px 0;">
+                        <label class="radio-option">
+                            <input type="radio" name="vinagre-option" value="500ml" data-price="35.00">
+                            <span>500 ml - S/. 35.00</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="vinagre-option" value="4l" data-price="120.00">
+                            <span>4 L - S/. 120.00</span>
+                        </label>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCartVinagre()">
+                        Añadir al Carrito
+                    </button>
+                </div>
+                <div class="product-image-cell">
+                    <img src="VINAGRE DANDY (1).jpeg" alt="VINAGRE" class="product-image" onclick="openZoom(this.src)">
+                    <img src="DJ VINAGRE DANDY (1).jpeg" alt="VINAGRE" class="product-image" onclick="openZoom(this.src)">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Category: Specialty -->
+        <div class="category-header light">
+            <h3 class="category-title"><strong>PRODUCTOS ESPECIALES</strong></h3>
+            <p class="category-description">Descubre nuestra línea de productos únicos con sabores tradicionales del Perú.</p>
+        </div>
+        
+        <!-- Product 5: JORA NATURAL -->
+        <div class="product-row">
+            <div class="product-content">
+                <div class="product-text length">
+                    <h4 class="product-name"><strong>JUANA JORA NATURAL</strong></h4>
+                    <p class="product-desc"><strong>La jora natural de Lambayeque</strong> proviene de la región norte del Perú, donde se elabora de manera artesanal siguiendo técnicas heredadas de la cultura Mochica (Muchik). Es la base para la preparación de la tradicional chicha de jora lambayecana, bebida emblemática del norte peruano, especialmente de ciudades como Ferreñafe, Monsefú y Pimentel.
+                                            <br><strong>Origen:</strong> Andes del Perú (Cusco, Lambayeque, Cajamarca).
+                                            <br><strong>Materia prima:</strong> Maíz germinado y seco.
+                                            <br><strong>Color:</strong> Amarillo claro o dorado.
+                                            <br><strong>Textura:</strong> Granos secos, duros y quebradizos.
+                                            <br><strong>Sabor:</strong> Leve sabor dulce y tostado, aroma a cereal.
+                                            <br><strong>Uso principal:</strong> Base para preparar chicha de jora y otros fermentados tradicionales.
+                                            <br><strong>Valor cultural:</strong> Producto ancestral de origen incaico, usado en ceremonias y festividades.
+                    </p>
+                    <p class="product-price">Elige tu presentación:</p>
+                    <div style="display: flex; flex-direction: column; gap: 6px; margin: 8px 0;">
+                        <label class="radio-option">
+                            <input type="radio" name="jora-natural-option" value="500ml" data-price="35.00">
+                            <span>500 ml - S/. 35.00</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="jora-natural-option" value="4l" data-price="100.00">
+                            <span>4 L - S/. 100.00</span>
+                        </label>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCartJoraNatural()">
+                        Añadir al Carrito
+                    </button>
+                </div>
+                <div class="product-image-cell">
+                    <img src="jorach3.jpeg" alt="DJ jora natural" class="product-image" onclick="openZoom(this.src)">
+                    <img src="DJ jora natural (1).jpg" alt="DJ jora natural" class="product-image" onclick="openZoom(this.src)">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Product 6: JORA MEMBRILLO -->
+        <div class="product-row dark">
+            <div class="product-content">
+                <div class="product-image-cell">
+                    <img src="jorach1.jpeg" alt="DJ jora membrillo" class="product-image" onclick="openZoom(this.src)">
+                    <img src="DJ jora membrillo (1).jpg" alt="DJ jora membrillo" class="product-image" onclick="openZoom(this.src)">
+                </div>
+                <div class="product-text">
+                    <h4 class="product-name"><strong>JUANA JORA DE MEMBRILLO</strong></h4>
+                    <p class="product-desc"><strong>La jora de membrillo</strong> es una variante artesanal elaborada en la región de Lambayeque, donde se combina la jora natural de maíz germinado con membrillo fresco durante la fermentación. Este fruto aporta un aroma dulce y un sabor suave a la tradicional chicha de jora lambayecana, conservando la esencia ancestral de la bebida originaria de la cultura Mochica (Muchik).
+                                            <br><strong>Origen:</strong> Introducido en el Perú durante la época colonial, adaptado en regiones andinas y costeñas.
+                                            <br><strong>Color:</strong> Amarillo dorado al madurar.
+                                            <br><strong>Textura:</strong> Firme, algo áspera.
+                                            <br><strong>Sabor:</strong> Ácido y aromático.
+                                            <br><strong>Propiedades:</strong> Alto contenido de vitamina C y pectina.
+                                            <br><strong>Usos:</strong> Dulces, mermeladas, bebidas fermentadas (como la chicha de jora con membrillo).
+                                            <br><strong>Valor cultural:</strong> Fruta tradicional usada para dar sabor y aroma a preparaciones artesanales.
+                    </p>
+                    <p class="product-price">Elige tu presentación:</p>
+                    <div style="display: flex; flex-direction: column; gap: 6px; margin: 8px 0;">
+                        <label class="radio-option">
+                            <input type="radio" name="jora-membrillo-option" value="500ml" data-price="35.00">
+                            <span>500 ml - S/. 35.00</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="jora-membrillo-option" value="4l" data-price="120.00">
+                            <span>4 L - S/. 120.00</span>
+                        </label>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCartJoraMembrillo()">
+                        Añadir al Carrito
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Product 7: JORA MAÍZ MORADO -->
+        <div class="product-row">
+            <div class="product-content">
+                <div class="product-text length">
+                    <h4 class="product-name"><strong>JUANA JORA DE MAÍZ MORADO</strong></h4>
+                    <p class="product-desc"><strong>La jora de maíz morado de Lambayeque</strong> es una variante artesanal elaborada con maíz morado germinado y seco. Este producto combina la tradición ancestral de la chicha de jora lambayecana con el uso del maíz morado (Zea mays L.), originario de los valles interandinos del Perú y apreciado por su color intenso y propiedades antioxidantes.
+                                            <br><strong>Origen:</strong> Valles interandinos del Perú.
+                                            <br><strong>Color:</strong> Morado oscuro o violeta intenso.
+                                            <br><strong>Textura:</strong> Grano duro y brillante.
+                                            <br><strong>Sabor:</strong> Dulce y terroso.
+                                            <br><strong>Propiedades:</strong> Rico en antocianinas (antioxidantes naturales) y en minerales.
+                                            <br><strong>Usos:</strong> Bebidas (chicha morada, mazamorra morada), postres y colorante natural.
+                                            <br><strong>Valor cultural:</strong> Símbolo de la agricultura andina y de la diversidad del maíz peruano.
+                    </p>
+                    <p class="product-price">Elige tu presentación:</p>
+                    <div style="display: flex; flex-direction: column; gap: 6px; margin: 8px 0;">
+                        <label class="radio-option">
+                            <input type="radio" name="jora-morada-option" value="500ml" data-price="35.00">
+                            <span>500 ml - S/. 35.00</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="jora-morada-option" value="4l" data-price="100.00">
+                            <span>4 L - S/. 100.00</span>
+                        </label>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCartJoraMorada()">
+                        Añadir al Carrito
+                    </button>
+                </div>
+                <div class="product-image-cell">
+                    <img src="jorach2.jpeg" alt="jora maiz morado" class="product-image" onclick="openZoom(this.src)">
+                    <img src="DJ jora maiz morado (1).jpg" alt="DJ jora maiz morado" class="product-image" onclick="openZoom(this.src)">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Product 8: ACEITE DE OLIVA EXTRA VIRGEN -->
+        <div class="product-row dark">
+            <div class="product-content">
+                <div class="product-image-cell">
+                    <img src="ol.png" alt="aceite de oliva" class="product-image" onclick="openZoom(this.src)">
+                    <img src="oliva.jpg" alt="aceite de oliva" class="product-image" onclick="openZoom(this.src)">
+                    <img src="aceite5.jpg" alt="aceite de oliva" class="product-image" onclick="openZoom(this.src)">
+                </div>
+                <div class="product-text">
+                    <h4 class="product-name"><strong>ACEITE DE OLIVA EXTRA VIRGEN</strong></h4>
+                    <p class="product-desc">Aceite de Oliva Extra Virgen de Tacna
+                                            Tradición, pureza y origen peruano
+                                            <br>El Aceite de Oliva Extra Virgen de Tacna es el resultado de una herencia olivarera centenaria, un clima privilegiado y un profundo respeto por la tierra. Cultivado en los fértiles valles del sur del Perú, este aceite expresa la esencia del desierto tacneño: intensidad, autenticidad y carácter.
+                                            Un territorio único
+                                            Tacna ofrece condiciones extraordinarias para el olivo:
+                                            Clima cálido y secoAmplias horas de sol
+                                            Suelos minerales bien drenados
+                                            Este entorno natural permite obtener aceitunas de alta calidad, ricas en antioxidantes y con un perfil sensorial inigualable.
+                                            Proceso artesanal
+                                            Nuestro aceite es producido mediante extracción en frío y únicamente por procesos mecánicos, preservando al máximo las propiedades naturales de la aceituna. Desde la cosecha temprana hasta el envasado, cada etapa es cuidada con dedicación y respeto por la tradición local.
+                                            Perfil sensorial
+                                            Aroma: afrutado fresco, notas de hierba cortada, hoja de olivo y almendra verde.
+                                            Sabor: balance entre dulzor inicial, ligero amargor y un toque picante final que confirma su pureza.Color: dorado con suaves tonos verdes.
+                                            Textura: suave y limpia, cuerpo delicado y elegante.
+                    </p>
+                    <p class="product-price">Elige tu presentación:</p>
+                    <div style="display: flex; flex-direction: column; gap: 6px; margin: 8px 0;">
+                        <label class="radio-option">
+                            <input type="radio" name="aceite-oliva-option" value="500ml" data-price="35.00">
+                            <span>500 ml - S/. 35.00</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="aceite-oliva-option" value="4l" data-price="120.00">
+                            <span>4 L - S/. 120.00</span>
+                        </label>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCartAceiteOliva()">
+                        Añadir al Carrito
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Product 9: ARROZ DEL CONDE -->
+        <div class="product-row">
+            <div class="product-content">
+                <div class="product-text length">
+                    <h4 class="product-name"><strong>ARROZ DEL CONDE</strong></h4>
+                    <p class="product-desc"><strong>ARROZ DEL CONDE</strong> – EXTRA PREMIUM
+                                            <br><strong>El Arroz Del Conde</strong> es un producto de alta calidad y origen lambayecano, cultivado con dedicación en el <strong>Rancho Del Conde</strong>, ubicado en <strong>Chakupe</strong>, Chiclayo – Perú.
+                                            Elaborado en alianza con Molinera El Tropical, nuestro aliado estratégico, garantizamos un proceso de molienda y selección bajo los más altos estándares de pureza y excelencia.
+                                            Cada grano es parte de una mezcla selecta de los mejores arroces del norte del Perú, logrando una textura uniforme, aroma natural y cocción perfecta.
+                                            Es un arroz extra premium, símbolo de tradición, calidad y sabor norteño, ideal para quienes buscan lo mejor en su mesa.
+                                            <br><strong>Denominación de Origen:</strong> Chiclayo, Lambayeque – Perú.
+                                            <br><strong>Características principales:</strong>
+                                            <br><strong>Tipo:</strong> Arroz Extra Premium
+                                            <br><strong>Origen:</strong> Chakupe – Chiclayo, Lambayeque, Perú
+                                            <br><strong>Aliado estratégico:</strong> Molinera El Tropical
+                                            <br><strong>Proceso:</strong> Selección y molienda de granos de alta calidad
+                                            <br><strong>Grano:</strong> Largo, entero, blanco y brillante
+                                            <br><strong>Sabor:</strong> Natural, suave y consistente
+                                            <br><strong>Valor agregado:</strong> Mezcla selecta de los mejores granos del norte del Perú
+                    </p>
+                    <p class="product-price">S/. 100.00</p>
+                    <div class="quantity-controls">
+                        <button class="qty-btn" onclick="decreaseQty(9)">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <div class="qty-display" id="qty-9">1</div>
+                        <button class="qty-btn" onclick="increaseQty(9)">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCart('Arroz Del Conde', 100.00, 9, 'arroz_el_conde.png')">
+                        Añadir al Carrito
+                    </button>
+                </div>
+                <div class="product-image-cell">
+                    <img src="granos_de_arroz.jpg" alt="granos de arroces" class="product-image" onclick="openZoom(this.src)">
+                    <img src="arroz_el_conde.png" alt="arroz del conde" class="product-image" onclick="openZoom(this.src)">
+                    <img src="arroz_preparacion.jpeg" alt="arroz preparacíon" class="product-image" onclick="openZoom(this.src)">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Product 10: LOCHE -->
+        <div class="product-row dark">
+            <div class="product-content">
+                <div class="product-image-cell">
+                    <img src="loche1.jpeg" alt="Loche" class="product-image" onclick="openZoom(this.src)">
+                    <img src="Loche Vertical (1).jpg" alt="Loche" class="product-image" onclick="openZoom(this.src)">
+                    <img src="loche4.jpeg" alt="Loche" class="product-image" onclick="openZoom(this.src)">
+                </div>
+                <div class="product-text">
+                    <h4 class="product-name"><strong>LOCHE</strong></h4>
+                    <p class="product-desc"><strong>El loche de Lambayeque</strong> es una variedad nativa de cucurbita que se cultiva únicamente en esta región. Se distingue por su forma alargada, cáscara verde oscuro, pulpa amarilla intensa, aroma dulce y sabor característico.
+                                            <br><strong>Denominación de Origen:</strong>  Loche de Lambayeque – Perú
+                                            <br><strong>Producto:</strong> Loche (Cucurbita moschata Duchesne)
+                                            <br><strong>Región de origen:</strong> Lambayeque, costa norte del Perú.
+                                            <br><strong>Reconocimiento oficial:</strong> Otorgado por INDECOPI en el año 2010.
+                                            <br><strong>Zona geográfica específica:</strong> Provincias de Chiclayo, Ferreñafe y Lambayeque.
+                                            <br><strong>Características principales:</strong>
+                                            <br><strong>Color de la pulpa:</strong> Amarillo intenso.
+                                            <br><strong>Sabor:</strong> Dulce, aromático y suave.
+                                            <br><strong>Textura:</strong> Fina, con poca fibra.
+                                            <br><strong>Usos tradicionales:</strong> Base de platos típicos como el seco de cabrito, arroz con pato y causa ferreñafana.
+                                            <br><strong>Valor cultural:</strong> Considerado un símbolo gastronómico de Lambayeque, con cultivo y selección ancestral heredada de la cultura Mochica (Muchik).                          
+                    </p>
+                    <p class="product-price">S/. 40.00</p>
+                    <div class="quantity-controls">
+                        <button class="qty-btn" onclick="decreaseQty(8)">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <div class="qty-display" id="qty-8">1</div>
+                        <button class="qty-btn" onclick="increaseQty(8)">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCart('Loche KG', 40.00, 8, 'loche1.jpeg')">
+                        Añadir al Carrito
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product 11: CABRITO -->
+        <div class="product-row">
+            <div class="product-content">
+                <div class="product-text length">
+                    <h3 class="product-name"><strong>CABRITO</strong></h3>
+                    <p class="product-desc">Criado en el <strong>Rancho del Conde</strong>
+                                            <br><strong>Denominación de Origen Norte del Perú</strong>
+                                            <br>Nuestro cabrito es el reflejo de una tradición ancestral del norte peruano, criado con dedicación en el <strong>Rancho del Conde</strong>, en un entorno natural donde el bienestar animal y la pureza del campo son prioridad.
+                                            <br>Criado de manera responsable desde sus primeros días, alimentado de forma natural y respetando su desarrollo, logramos una carne tierna, jugosa y delicada, reconocida por su sabor único y su textura suave.
+                                            <br><strong>Origen y Tradición:</strong>
+                                            <br>El norte del Perú —en especial <strong>Chiclayo</strong> y las tierras lambayecanas— es cuna de la cultura del cabrito, una herencia gastronómica que honramos y preservamos. Cada animal es criado bajo el método tradicional, asegurando autenticidad y excelencia.
+                                            <br><strong>Características:</strong>
+                                            <br>-Carne fina, suave y de sabor suave y equilibrado.
+                                            <br>-Crianza ética y natural en nuestro rancho familiar.
+                                            <br>-Inspirado en la tradición culinaria del norte.
+                                            <br>-Selección exclusiva para gastronomía de alta calidad.
+                                            <br>-Un producto con identidad.
+                                            <br>Nuestro cabrito lleva consigo la esencia del campo norteño, el respeto por la naturaleza y el orgullo de nuestras raíces. Es un tributo al Perú rural, a sus sabores auténticos y a la cocina que trasciende generaciones.
+                                            Del rancho a tu mesa, con origen, historia y nobleza.
+                    </p>
+                    <p class="product-price">S/. 40.00</p>
+                    <div class="quantity-controls">
+                        <button class="qty-btn" onclick="decreaseQty(11)">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <div class="qty-display" id="qty-11">1</div>
+                        <button class="qty-btn" onclick="increaseQty(11)">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCart('Cabrito', 40.00, 11, 'cabrito.jpeg')">
+                        Añadir al Carrito
+                    </button>
+                </div>
+                <div class="product-image-cell">
+                    <img src="cabrito.jpeg" alt="cabrito" class="product-image" onclick="openZoom(this.src)">
+                    <img src="cabrito3.jpg" alt="cabrito3" class="product-image" onclick="openZoom(this.src)">
+                    <img src="cabrito2.jpg" alt="cabrito2" class="product-image" onclick="openZoom(this.src)">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Product 12: PATO MOCHATA -->
+        <div class="product-row dark">
+            <div class="product-content">
+                <div class="product-image-cell">
+                    <img src="pato_mochata.jpg" alt="pato mochata" class="product-image" onclick="openZoom(this.src)">
+                    <img src="pato1.jpg" alt="pato mochata" class="product-image" onclick="openZoom(this.src)">
+                    <img src="pato_sellado_al_vacio.jpeg" alt="Loche" class="product-image" onclick="openZoom(this.src)">
+                </div>
+                <div class="product-text">
+                    <h4 class="product-name"><strong>PATO MOCHATA</strong></h4>
+                    <p class="product-desc"><strong>El Pato Mochata del Conde</strong> es criado de forma natural en el <strong>Rancho Del Conde</strong>, ubicado en <strong>Chakupe</strong>, <strong>Lambayeque</strong>, una zona privilegiada por su clima cálido y campos fértiles del norte peruano.
+                                            De la reconocida especie pato criollo mochata, esta ave se caracteriza por su carne tierna, sabor intenso y textura jugosa, cualidades que la convierten en ingrediente esencial de la gastronomía lambayecana, especialmente en platos tradicionales como el arroz con pato a la chiclayana.
+                                            <br><strong>En el Rancho del Conde</strong> , criamos nuestros patos bajo métodos sostenibles y alimentación natural, garantizando un producto artesanal, saludable y de origen controlado
+                                            <br><strong>Denominación de Origen:</strong><strong>Chakupe</strong>, <strong>Chiclayo</strong> – <strong>Lambayeque</strong>, <strong>Perú</strong>.
+                                            <br><strong>Especie:</strong> <strong>Pato Mochata</strong> (pato criollo peruano).
+                                            <br><strong>Crianza:</strong> Natural y sostenible en campo abierto.
+                                            <br><strong>Carne:</strong> Tierna, de sabor intenso y textura fina.
+                                            <br><strong>Uso gastronómico:</strong> Ideal para platos típicos del norte como arroz con pato, seco o guisos regionales.
+                                            <br><strong>Valor agregado:</strong> Producto artesanal de denominación local y calidad premium.                          
+                    </p>
+                    <p class="product-price">S/. 80.00</p>
+                    <div class="quantity-controls">
+                        <button class="qty-btn" onclick="decreaseQty(10)">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <div class="qty-display" id="qty-10">1</div>
+                        <button class="qty-btn" onclick="increaseQty(10)">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCart('Pato Mochata', 80.00, 10, 'pato_mochata.jpg')">
+                        Añadir al Carrito
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Product 13: CHINGUIRITO -->
+        <div class="product-row">
+            <div class="product-content">
+                <div class="product-text length">
+                    <h3 class="product-name"><strong>CHINGUIRITO</strong></h3>
+                    <p class="product-desc">El chinguirito es un plato típico del norte peruano, especialmente de Lambayeque, elaborado con pescado seco y deshilachado, tradicionalmente de guitarra (pez seco salado), que se marina en limón, ají limo, cebolla y sal, similar al ceviche.
+                                            <br><strong>Denominación de origen:</strong> 
+                                            <br>Lambayeque – Perú 
+                                            <br><strong>Producto:</strong> 
+                                            <br>Chinguirito.
+                                            <br><strong>Características principales:</strong>
+                                            <br><strong>Origen:</strong> Región Lambayeque, costa norte del Perú.
+                                            <br><strong>Tipo de plato:</strong> Entrada fría tradicional.
+                                            <br><strong>Ingrediente principal:</strong> Pescado seco y deshilachado, generalmente del pez guitarra (Nematistiella sp.).
+                                            <br><strong>Color:</strong> Blanco o ligeramente dorado, dependiendo del secado del pescado.
+                                            <br><strong>Textura:</strong> Fina, fibrosa y suave al hidratarse.
+                                            <br><strong>Sabor:</strong> Ácido, fresco y ligeramente salado, con notas de ají y limón.
+                                            <br><strong>Aroma:</strong> Cítrico y marino.
+                                            <br><strong>Acompañamientos típicos:</strong> Yuca cocida, zarandaja, cancha serrana, camote o choclo.
+                                            <br><strong>Preparación tradicional:</strong>Preparación tradicional: El pescado seco se remoja para ablandarlo, se deshilacha y se mezcla con jugo de limón, ají limo, cebolla y sal.
+                                            <br><strong>Valor cultural:</strong> Representa la cocina ancestral lambayecana, combinando la tradición pesquera con los sabores criollos del norte del Perú.
+                    </p>
+                    <p class="product-price">S/. 40.00</p>
+                    <div class="quantity-controls">
+                        <button class="qty-btn" onclick="decreaseQty(13)">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <div class="qty-display" id="qty-13">1</div>
+                        <button class="qty-btn" onclick="increaseQty(13)">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCart('Chinguirito KG', 40.00, 13, 'guitarra1.jpeg')">
+                        Añadir al Carrito
+                    </button>
+                </div>
+                <div class="product-image-cell">
+                    <img src="guitarra1.jpeg" alt="chinguirito" class="product-image" onclick="openZoom(this.src)">
+                    <img src="guitarra2.jpeg" alt="chinguirito" class="product-image" onclick="openZoom(this.src)">
+                    <img src="chinguirito3.jpeg" alt="chinguirito" class="product-image" onclick="openZoom(this.src)">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Product 14: VARIEDAD DE AJIES -->
+        <div class="product-row dark">
+            <div class="product-content">
+                <div class="product-image-cell">
+                    <img src="ajis.jpeg" alt="AJI" class="product-image" onclick="openZoom(this.src)">
+                    <img src="ajies.jpeg" alt="aji" class="product-image" onclick="openZoom(this.src)">
+                    <img src="variedad_de_ajies.jpeg" alt="aji" class="product-image" onclick="openZoom(this.src)">
+                </div>
+                <div class="product-text">
+                    <h4 class="product-name"><strong>VARIEDAD DE AJIES</strong></h4>
+                    <p class="product-desc"><strong>Ajíes Criollos del Norte-Rancho del Conde</strong>
+                    <br><strong>En el Rancho del Conde</strong>, ubicado en <strong>Chakupe</strong>, <strong>Chiclayo</strong> – <strong>Lambayeque</strong>, cultivamos y preservamos las más emblemáticas variedades de ajíes tradicionales del norte del Perú.
+                    <br>Nuestra selección reúne semillas criollas patrimoniales, cuidadosamente sembradas y cosechadas de manera artesanal, respetando el entorno y la identidad gastronómica lambayecana.
+                    Producimos un ensamble auténtico de ajíes norteños:
+                    <strong>Mochero</strong>, <strong>Cerezo</strong>, <strong>Uña de Gavilán</strong>, <strong>Pipi de Mono</strong> y <strong>Limo</strong>, cada uno con su personalidad única — aromas florales y cítricos, notas herbales y frutales, y un nivel de picor que va de medio a intenso — reflejando la riqueza culinaria de nuestra tierra.
+                    <br>Estos ajíes, reconocidos por chefs y cocineros tradicionales, son el alma del sabor del norte peruano, indispensables en cebiches, aderezos, guisos, sopas y platos emblemáticos como el seco, arroz norteño y marinados criollos.
+                    <br><strong>En el Rancho del Conde</strong> cosechamos con respeto, pasión y orgullo por nuestra herencia agrícola, ofreciendo un producto 100% natural, de origen controlado y con la pureza y fuerza del valle lambayecano.                          
+                    </p>
+                    <p class="product-price">S/. 25.00</p>
+                    <div class="quantity-controls">
+                        <button class="qty-btn" onclick="decreaseQty(14)">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <div class="qty-display" id="qty-14">1</div>
+                        <button class="qty-btn" onclick="increaseQty(14)">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCart('Variedad de ajies', 25.00, 14, 'ajis.jpeg')">
+                        Añadir al Carrito
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div> <!-- Cierre de .email-container -->
+
+    <!-- Cart Float Button -->
+    <div class="cart-float" onclick="openCart()" style="display: none;" id="cartFloat">
+        🛒
+        <span class="cart-badge" id="cartBadge">0</span>
+    </div>
+    
+    <!-- WhatsApp Float Button -->
+    <a href="https://wa.me/51999999999?text=Hola,%20tengo%20una%20consulta" class="whatsapp-float" target="_blank">
+        💬
+    </a>
+
+    <!-- Contact & Map Section -->
+    <section class="contact-section">
+        <h3 class="contact-title">Contacto y Ubicación</h3>
+        <div class="contact-content">
+            <div class="contact-info">
+                <h3>Información de Contacto</h3>
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Jr.Francisco Moreno 389, Surquillo, Lima - Perú</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <a href="tel:+51953489892">
+                        <span>+51 991 198 681</span>
+                    </a>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-clock"></i>
+                    <span>Lunes a Domingo: 9:00 AM - 6:00 PM</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3900.9308475030693!2d-77.02659122618198!3d-12.116884043207714!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c81044d6a2e3%3A0xb61b78797a2806e!2sSta.%20Rosa%20389%2C%20Surquillo%2015047!5e0!3m2!1ses!2spe!4v1758899021316!5m2!1ses!2spe" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </section>
+
+    <!-- Footer -->
+<footer>
+    <p>&copy; 2025 Chakupe. Todos los derechos reservados.</p>
+    <!-- Información Legal -->
+    <p class="legal-info">
+        RUC: 20601263506<br>
+        Razón Social: PARRAS NUEVAS S.A.C.
+    </p>
+    <!-- Social Media Icons -->
+    <div class="social-media">
+        <a href="https://www.facebook.com/share/1C6ZSWweqj/" target="_blank" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+        <a href="https://www.instagram.com/chakupe_gran_despensa_mochica?igsh=MWx1a2N4ZTA1NXZi" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://wa.me/+51991198681?text=Hola!%20Me%20gustaría%20realizar%20un%20pedido." target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        <a href="https://www.google.com/maps/place/Sta.+Rosa+389,+Surquillo+15047/@-12.1176529,-77.0262169,16.25z/data=!4m10!1m2!2m1!1s389+Sta.+Rosa,%C2%A0Lima,+Provincia+de+Lima!3m6!1s0x9105c81044d6a2e3:0xb61b78797a2806e!8m2!3d-12.1168893!4d-77.0240163!15sCikzODkgU2FudGEuIFJvc2EswqBMaW1hLCBQcm92aW5jaWEgZGUgTGltYZIBCnN1YnByZW1pc2XgAQA!16s%2Fg%2F11j1lk1cn7?entry=ttu&g_ep=EgoyMDI1MDkyMy4wIKXMDSoASAFQAw%3D%3D" target="_blank" aria-label="Google Maps"><i class="fas fa-map-marker-alt"></i></a>
+    </div>
+</footer>
+
+    <script>
+        // === ZOOM FUNCTIONALITY ===
+        function openZoom(src) {
+            const modal = document.getElementById("imageZoomModal");
+            const img = document.getElementById("zoomedImage");
+            img.src = src;
+            modal.style.display = "flex";
+            document.body.style.overflow = "hidden";
+        }
+        function closeZoom() {
+            document.getElementById("imageZoomModal").style.display = "none";
+            document.body.style.overflow = "auto";
+        }
+        
+        // === CART & AUTH LOGIC ===
+        let currentUser = null;
+        let cart = []; // { name, price, quantity, image }
+        
+        window.onload = function() {
+            checkAuth();
+        };
+        
+        function checkAuth() {
+            const user = sessionStorage.getItem('chakupeUser');
+            if (user) {
+                currentUser = JSON.parse(user);
+                showUserBar();
+            }
+        }
+        
+        function showAuthModal() {
+            document.getElementById('authModal').classList.add('active');
+        }
+        
+        function hideAuthModal() {
+            document.getElementById('authModal').classList.remove('active');
+        }
+        
+        function register() {
+            const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const dni = document.getElementById('regDni').value.trim();
+            const phone = document.getElementById('regPhone').value.trim();
+            
+            if (!name || !email || !dni || !phone) {
+                alert('Por favor completa todos los campos: nombre, correo, DNI y celular.');
+                return;
+            }
+            
+            if (!/^\d{8}$/.test(dni)) {
+                alert('El DNI debe tener 8 dígitos numéricos.');
+                return;
+            }
+            
+            const user = { name, email, dni, phone };
+            currentUser = user;
+            sessionStorage.setItem('chakupeUser', JSON.stringify(user));
+            hideAuthModal();
+            showUserBar();
+            alert('¡Registro exitoso! Ahora puedes agregar productos al carrito.');
+        }
+        
+        function logout() {
+            currentUser = null;
+            cart = [];
+            sessionStorage.removeItem('chakupeUser');
+            document.getElementById('userBar').style.display = 'none';
+            document.getElementById('cartFloat').style.display = 'none';
+            updateCartBadge();
+            showAuthModal();
+        }
+        
+        function showUserBar() {
+            document.getElementById('userBar').style.display = 'flex';
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('cartFloat').style.display = 'flex';
+        }
+        
+        // === FUNCIONES PARA PRODUCTOS CON DOS FORMATOS ===
+        function addToCartPeliroja() {
+            if (!currentUser) { alert('Debes registrarte primero...'); showAuthModal(); return; }
+            const selected = document.querySelector('input[name="peliroja-option"]:checked');
+            if (!selected) { alert('Elige una presentación.'); return; }
+            const size = selected.value === 'unidad' ? 'Unidad (375ml)' : 'Fourpack (4 unidades)';
+            const price = parseFloat(selected.dataset.price);
+            const name = `La Pelirroja – ${size}`;
+            const image = selected.value === 'unidad' ? 'peliroja negra black (1).jpg' : 'pelirroja fourpack (1).jpg';
+            addToCartGeneric(name, price, 1, image);
+        }
+        
+        function addToCartOroLiquido() {
+            if (!currentUser) { alert('Debes registrarte primero...'); showAuthModal(); return; }
+            const selected = document.querySelector('input[name="oroliquido-option"]:checked');
+            if (!selected) { alert('Elige una presentación.'); return; }
+            const size = selected.value === 'unidad' ? 'Unidad (330ml)' : 'Sixpack (6 unidades)';
+            const price = parseFloat(selected.dataset.price);
+            const name = `Oro Líquido – ${size}`;
+            const image = selected.value === 'unidad' ? 'oro liquido botella.jpg' : 'oro liquido grupo (1).jpg';
+            addToCartGeneric(name, price, 1, image);
+        }
+        
+        function addToCartVinagre() {
+            if (!currentUser) { alert('Debes registrarte primero...'); showAuthModal(); return; }
+            const selected = document.querySelector('input[name="vinagre-option"]:checked');
+            if (!selected) { alert('Elige una presentación.'); return; }
+            const size = selected.value === '500ml' ? '500 ml' : '4 L';
+            const price = parseFloat(selected.dataset.price);
+            const name = `Vinagre El Dandy – ${size}`;
+            const image = 'VINAGRE DANDY (1).jpeg';
+            addToCartGeneric(name, price, 1, image);
+        }
+        
+        function addToCartJoraNatural() {
+            if (!currentUser) { alert('Debes registrarte primero...'); showAuthModal(); return; }
+            const selected = document.querySelector('input[name="jora-natural-option"]:checked');
+            if (!selected) { alert('Elige una presentación.'); return; }
+            const size = selected.value === '500ml' ? '500 ml' : '4 L';
+            const price = parseFloat(selected.dataset.price);
+            const name = `Jora Natural – ${size}`;
+            const image = 'jorach3.jpeg';
+            addToCartGeneric(name, price, 1, image);
+        }
+        
+        function addToCartJoraMembrillo() {
+            if (!currentUser) { alert('Debes registrarte primero...'); showAuthModal(); return; }
+            const selected = document.querySelector('input[name="jora-membrillo-option"]:checked');
+            if (!selected) { alert('Elige una presentación.'); return; }
+            const size = selected.value === '500ml' ? '500 ml' : '4 L';
+            const price = parseFloat(selected.dataset.price);
+            const name = `Jora Membrillo – ${size}`;
+            const image = 'jorach1.jpeg';
+            addToCartGeneric(name, price, 1, image);
+        }
+        
+        function addToCartJoraMorada() {
+            if (!currentUser) { alert('Debes registrarte primero...'); showAuthModal(); return; }
+            const selected = document.querySelector('input[name="jora-morada-option"]:checked');
+            if (!selected) { alert('Elige una presentación.'); return; }
+            const size = selected.value === '500ml' ? '500 ml' : '4 L';
+            const price = parseFloat(selected.dataset.price);
+            const name = `Jora Maíz Morado – ${size}`;
+            const image = 'jorach2.jpeg';
+            addToCartGeneric(name, price, 1, image);
+        }
+        
+        function addToCartAceiteOliva() {
+            if (!currentUser) { alert('Debes registrarte primero...'); showAuthModal(); return; }
+            const selected = document.querySelector('input[name="aceite-oliva-option"]:checked');
+            if (!selected) { alert('Elige una presentación.'); return; }
+            const size = selected.value === '500ml' ? '500 ml' : '4 L';
+            const price = parseFloat(selected.dataset.price);
+            const name = `Aceite de Oliva Extra Virgen – ${size}`;
+            const image = 'ol.png';
+            addToCartGeneric(name, price, 1, image);
+        }
+        
+        // === PRODUCTOS CON CANTIDAD SIMPLE ===
+        function addToCart(productName, price, productId, image) {
+            if (!currentUser) { alert('Debes registrarte primero...'); showAuthModal(); return; }
+            const quantity = parseInt(document.getElementById(`qty-${productId}`).textContent);
+            addToCartGeneric(productName, price, quantity, image);
+        }
+        
+        function addToCartGeneric(productName, price, quantity, image) {
+            const existingItem = cart.find(item => item.name === productName && item.price === price);
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cart.push({ name: productName, price: price, quantity: quantity, image: image });
+            }
+            updateCartBadge();
+            alert(`${quantity} x ${productName} agregado(s) al carrito.`);
+        }
+        
+        // === CONTROLES DE CANTIDAD (solo para productos simples) ===
+        function increaseQty(productId) {
+            const qtyElement = document.getElementById(`qty-${productId}`);
+            let currentQty = parseInt(qtyElement.textContent);
+            qtyElement.textContent = currentQty + 1;
+            
+            // Animación sutil
+            qtyElement.style.transform = 'scale(1.2)';
+            setTimeout(() => {
+                qtyElement.style.transform = 'scale(1)';
+            }, 200);
+        }
+        
+        function decreaseQty(productId) {
+            const qtyElement = document.getElementById(`qty-${productId}`);
+            let currentQty = parseInt(qtyElement.textContent);
+            if (currentQty > 1) {
+                qtyElement.textContent = currentQty - 1;
+                
+                // Animación sutil
+                qtyElement.style.transform = 'scale(0.8)';
+                setTimeout(() => {
+                    qtyElement.style.transform = 'scale(1)';
+                }, 200);
+            }
+        }
+        
+        // === CARRITO ===
+        function updateCartBadge() {
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartBadge').textContent = totalItems;
+            
+            // Animación del badge
+            const badge = document.getElementById('cartBadge');
+            badge.style.transform = 'scale(1.3)';
+            setTimeout(() => {
+                badge.style.transform = 'scale(1)';
+            }, 300);
+        }
+        
+        function openCart() {
+            if (cart.length === 0) {
+                alert('Tu carrito está vacío');
+                return;
+            }
+            
+            const cartItems = document.getElementById('cartItems');
+            cartItems.innerHTML = '';
+            let total = 0;
+            
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'cart-item';
+                itemDiv.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}" class="cart-item-image" onerror="this.src='https://via.placeholder.com/60x60?text=Producto'">
+                    <div class="cart-item-info">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-price">S/. ${item.price.toFixed(2)} c/u</div>
+                    </div>
+                    <div class="cart-item-controls">
+                        <div class="cart-item-controls">
+                            <button class="cart-qty-btn" onclick="updateCartItemQty(${index}, -1)">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <div class="cart-qty-display">${item.quantity}</div>
+                            <button class="cart-qty-btn" onclick="updateCartItemQty(${index}, 1)">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <button class="delete-btn" onclick="removeCartItem(${index})" title="Eliminar producto">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                        <div class="cart-item-total">S/. ${itemTotal.toFixed(2)}</div>
+                    </div>
+                `;
+                cartItems.appendChild(itemDiv);
+            });
+            
+            document.getElementById('cartTotal').textContent = `Total: S/. ${total.toFixed(2)}`;
+            document.getElementById('cartModal').classList.add('active');
+        }
+        
+        function closeCart() {
+            document.getElementById('cartModal').classList.remove('active');
+        }
+        
+        function updateCartItemQty(index, change) {
+            if (cart[index].quantity + change < 1) return;
+            cart[index].quantity += change;
+            if (cart[index].quantity === 0) {
+                cart.splice(index, 1);
+            }
+            openCart();
+            updateCartBadge();
+        }
+        
+        function removeCartItem(index) {
+            // Animación de eliminación
+            const cartItems = document.getElementById('cartItems');
+            const itemElements = cartItems.children;
+            const itemToRemove = itemElements[index];
+            
+            itemToRemove.style.transition = 'all 0.3s ease';
+            itemToRemove.style.transform = 'translateX(100%)';
+            itemToRemove.style.opacity = '0';
+            
+            setTimeout(() => {
+                cart.splice(index, 1);
+                openCart();
+                updateCartBadge();
+            }, 300);
+        }
+        
+        function sendToWhatsApp() {
+            if (cart.length === 0) {
+                alert('Tu carrito está vacío');
+                return;
+            }
+            
+            let message = `*Nuevo Pedido - Chakupe*%0A%0A`;
+            message += `*Cliente:* ${currentUser.name}%0A`;
+            message += `*Email:* ${currentUser.email}%0A`;
+            message += `*DNI:* ${currentUser.dni}%0A`;
+            message += `*Celular:* ${currentUser.phone}%0A%0A`;
+            message += `*Productos:*%0A`;
+            
+            let total = 0;
+            cart.forEach((item) => {
+                const itemTotal = item.price * item.quantity;
+                message += `${item.quantity} x ${item.name} - S/. ${itemTotal.toFixed(2)}%0A`;
+                total += itemTotal;
+            });
+            
+            message += `%0A*Total: S/. ${total.toFixed(2)}*`;
+            
+            const whatsappNumber = '51927743956';
+            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+            
+            cart = [];
+            updateCartBadge();
+            closeCart();
+            alert('Pedido enviado por WhatsApp. ¡Gracias por tu compra!');
+        }
+    </script>
+</body>
+</html>
