@@ -342,6 +342,7 @@
         }
         .product-row.dark {
             background: #313533;
+            margin-top: 10px;
         }
         .product-row.dark:hover {
             background: #3a3e3c;
@@ -352,7 +353,7 @@
         .product-text {
             display: table-cell;
             vertical-align: middle;
-            padding: 0;
+            padding: 10px;
             width: 60%;
         }
         .product-text.right {
@@ -362,15 +363,20 @@
             display: table-cell;
             vertical-align: unset;
             width: 40%;
-            padding: 0 20px;
+            padding: 0 10px;
         }
+        /* Espacio superior para que la foto NO quede pegada a la cabecera */
+        .product-image-cell img {
+            margin-top: 20px;
+        }
+
         .product-image {
             width: 100%;
             height: auto;
             display: block;
-            margin-bottom: 20px;
+            margin-bottom: 8px;
             cursor: zoom-in;
-            border-radius: 5px;
+            border-radius: 1px;
             transition: all 0.3s ease;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
@@ -379,8 +385,8 @@
             box-shadow: 0 6px 18px rgba(0,0,0,0.15);
         }
         .product-name {
-            font-size: 24px;
-            font-weight: 500;
+            font-size: 20px;
+            font-weight: 400;
             letter-spacing: 1px;
             color: #313533;
             margin-bottom: 10px;
@@ -454,7 +460,7 @@
             cursor: pointer;
         }
         .radio-option span {
-            font-size: 14px;
+            font-size: 10px;
             font-weight: 500;
         }
         
@@ -985,11 +991,11 @@
         
         @media only screen and (max-width: 380px) {
             .product-text {
-                width: 48%;
+                width: 60%;
                 padding: 12px;
             }
             .product-image-cell {
-                width: 52%;
+                width: 40%;
                 padding: 0 8px;
             }
             .brand-name {
@@ -1036,6 +1042,14 @@
     line-height: 1.6;
     font-weight: 400;
 }
+/* === ALINEAR SIEMPRE EL TEXTO ARRIBA JUNTO A LA FOTO === */
+.product-text,
+.product-image-cell {
+    display: table-cell !important;
+    vertical-align: top !important;
+}
+
+
     </style>
 </head>
 <body>
@@ -1139,7 +1153,7 @@
                     <div style="display: flex; flex-direction: column; gap: 6px; margin: 8px 0;">
                         <label class="radio-option">
                             <input type="radio" name="peliroja-option" value="unidad" data-price="35.00">
-                            <span>Unidad (375ml) - S/. 35.00</span>
+                            <span>Und(375ml) - S/35.00</span>
                         </label>
                         <label class="radio-option">
                             <input type="radio" name="peliroja-option" value="fourpack" data-price="140.00">
@@ -1183,14 +1197,14 @@
                                             <br><strong>Contenido natural:</strong> 100% natural, sin preservantes ni colorantes.
                     </p>
                     <p class="product-price">Elige tu presentación:</p>
-                    <div style="display: flex; flex-direction: column; gap: 6px; margin: 8px 0;">
+                    <div style="display: flex; flex-direction: column; gap: 6px; margin: 8px 0;color:white; ">
                         <label class="radio-option">
                             <input type="radio" name="oroliquido-option" value="unidad" data-price="20.00">
-                            <span>Unidad (330ml) - S/. 20.00</span>
+                            <span>Und (330ml) - S/20.00</span>
                         </label>
                         <label class="radio-option">
                             <input type="radio" name="oroliquido-option" value="sixpack" data-price="120.00">
-                            <span>Sixpack (6 unidades) - S/. 120.00</span>
+                            <span>Sixpack (6 unidades) - S/120.00</span>
                         </label>
                     </div>
                     <button class="add-to-cart-btn" onclick="addToCartOroLiquido()">
@@ -1217,7 +1231,7 @@
                                             <br><strong>Sabor:</strong> Suave, redondo, con notas dulces y persistentes.
                                             <br><strong>Valor cultural:</strong> Representa la unión de las tradiciones pisqueras del Perú en un solo destilado de alta gama.
                     </p>
-                    <p class="product-price">S/. 180.00</p>
+                    <p class="product-price">S/180.00</p>
                     <div class="quantity-controls">
                         <button class="qty-btn" onclick="decreaseQty(3)">
                             <i class="fas fa-minus"></i>
@@ -1262,7 +1276,7 @@
                                             <br><strong>Presentación:</strong> Botella elegante de 750ml con diseño exclusivo
                                             <br><strong>Graduación:</strong> 40% vol.
                     </p>
-                    <p class="product-price">S/. 250.00</p>
+                    <p class="product-price">S/250.00</p>
                     <div class="quantity-controls">
                         <button class="qty-btn" onclick="decreaseQty(15)">
                             <i class="fas fa-minus"></i>
@@ -1300,11 +1314,11 @@
                     <div style="display: flex; flex-direction: column; gap: 6px; margin: 8px 0;">
                         <label class="radio-option">
                             <input type="radio" name="vinagre-option" value="500ml" data-price="35.00">
-                            <span>500 ml - S/. 35.00</span>
+                            <span>500 ml - S/35.00</span>
                         </label>
                         <label class="radio-option">
                             <input type="radio" name="vinagre-option" value="4l" data-price="120.00">
-                            <span>4 L - S/. 120.00</span>
+                            <span>4 L - S/120.00</span>
                         </label>
                     </div>
                     <button class="add-to-cart-btn" onclick="addToCartVinagre()">
@@ -1379,14 +1393,14 @@
                                             <br><strong>Valor cultural:</strong> Fruta tradicional usada para dar sabor y aroma a preparaciones artesanales.
                     </p>
                     <p class="product-price">Elige tu presentación:</p>
-                    <div style="display: flex; flex-direction: column; gap: 6px; margin: 8px 0;">
+                    <div style="display: flex; flex-direction: column; gap: 6px; margin: 8px 0; color: white;">
                         <label class="radio-option">
                             <input type="radio" name="jora-membrillo-option" value="500ml" data-price="35.00">
-                            <span>500 ml - S/. 35.00</span>
+                            <span>500 ml - S/35.00</span>
                         </label>
                         <label class="radio-option">
                             <input type="radio" name="jora-membrillo-option" value="4l" data-price="120.00">
-                            <span>4 L - S/. 120.00</span>
+                            <span>4 L - S/120.00</span>
                         </label>
                     </div>
                     <button class="add-to-cart-btn" onclick="addToCartJoraMembrillo()">
@@ -1414,11 +1428,11 @@
                     <div style="display: flex; flex-direction: column; gap: 6px; margin: 8px 0;">
                         <label class="radio-option">
                             <input type="radio" name="jora-morada-option" value="500ml" data-price="35.00">
-                            <span>500 ml - S/. 35.00</span>
+                            <span>500 ml - S/35.00</span>
                         </label>
                         <label class="radio-option">
                             <input type="radio" name="jora-morada-option" value="4l" data-price="100.00">
-                            <span>4 L - S/. 100.00</span>
+                            <span>4 L - S/100.00</span>
                         </label>
                     </div>
                     <button class="add-to-cart-btn" onclick="addToCartJoraMorada()">
@@ -1458,14 +1472,14 @@
                                             Textura: suave y limpia, cuerpo delicado y elegante.
                     </p>
                     <p class="product-price">Elige tu presentación:</p>
-                    <div style="display: flex; flex-direction: column; gap: 6px; margin: 8px 0;">
+                    <div style="display: flex; flex-direction: column; gap: 6px; margin: 8px 0;color:white">
                         <label class="radio-option">
                             <input type="radio" name="aceite-oliva-option" value="500ml" data-price="35.00">
-                            <span>500 ml - S/. 35.00</span>
+                            <span>500 ml - S/ 35.00</span>
                         </label>
                         <label class="radio-option">
                             <input type="radio" name="aceite-oliva-option" value="4l" data-price="120.00">
-                            <span>4 L - S/. 120.00</span>
+                            <span>4 L - S/ 120.00</span>
                         </label>
                     </div>
                     <button class="add-to-cart-btn" onclick="addToCartAceiteOliva()">
@@ -1540,7 +1554,7 @@
                                             <br><strong>Usos tradicionales:</strong> Base de platos típicos como el seco de cabrito, arroz con pato y causa ferreñafana.
                                             <br><strong>Valor cultural:</strong> Considerado un símbolo gastronómico de Lambayeque, con cultivo y selección ancestral heredada de la cultura Mochica (Muchik).                          
                     </p>
-                    <p class="product-price">S/. 40.00</p>
+                    <p class="product-price">S/ 40.00</p>
                     <div class="quantity-controls">
                         <button class="qty-btn" onclick="decreaseQty(8)">
                             <i class="fas fa-minus"></i>
@@ -1577,7 +1591,7 @@
                                             <br>Nuestro cabrito lleva consigo la esencia del campo norteño, el respeto por la naturaleza y el orgullo de nuestras raíces. Es un tributo al Perú rural, a sus sabores auténticos y a la cocina que trasciende generaciones.
                                             Del rancho a tu mesa, con origen, historia y nobleza.
                     </p>
-                    <p class="product-price">S/. 40.00</p>
+                    <p class="product-price">S/ 40.00</p>
                     <div class="quantity-controls">
                         <button class="qty-btn" onclick="decreaseQty(11)">
                             <i class="fas fa-minus"></i>
@@ -1619,7 +1633,7 @@
                                             <br><strong>Uso gastronómico:</strong> Ideal para platos típicos del norte como arroz con pato, seco o guisos regionales.
                                             <br><strong>Valor agregado:</strong> Producto artesanal de denominación local y calidad premium.                          
                     </p>
-                    <p class="product-price">S/. 80.00</p>
+                    <p class="product-price">S/ 80.00</p>
                     <div class="quantity-controls">
                         <button class="qty-btn" onclick="decreaseQty(10)">
                             <i class="fas fa-minus"></i>
@@ -1658,7 +1672,7 @@
                                             <br><strong>Preparación tradicional:</strong>Preparación tradicional: El pescado seco se remoja para ablandarlo, se deshilacha y se mezcla con jugo de limón, ají limo, cebolla y sal.
                                             <br><strong>Valor cultural:</strong> Representa la cocina ancestral lambayecana, combinando la tradición pesquera con los sabores criollos del norte del Perú.
                     </p>
-                    <p class="product-price">S/. 40.00</p>
+                    <p class="product-price">S/ 40.00</p>
                     <div class="quantity-controls">
                         <button class="qty-btn" onclick="decreaseQty(13)">
                             <i class="fas fa-minus"></i>
