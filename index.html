@@ -701,8 +701,8 @@
         }
         
         .cart-item-image {
-            width: 60px;
-            height: 60px;
+            width: 35%;
+            height: 100%;
             object-fit: cover;
             border-radius: 10px;
             flex-shrink: 0;
@@ -1048,6 +1048,44 @@
     display: table-cell !important;
     vertical-align: top !important;
 }
+.product-varieties {
+    background: rgba(255, 255, 255, 0.05);
+    border-left: 1px solid #414040;
+    border-right: 4px solid #b4b4b4;
+    padding: 15px 18px;
+    margin-top: 20px;
+    border-radius: 8px;
+    color: #ffffff; /* 🔥 Todo el texto en blanco */
+}
+
+.product-varieties h4 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #ffffff; /* Título en blanco */
+}
+
+.product-varieties p {
+    margin: 10px 0;
+    line-height: 1.45;
+    font-size: 15px;
+    color: #ffffff;
+    padding-left: 14px; /* ← agrega espacio entre el punto y el texto */
+    position: relative; /* necesario para mover el punto */
+}
+
+.product-varieties p strong {
+    color: #ffffff; /* Texto destacado también en blanco */
+    font-weight: 600;
+}
+
+.product-varieties p::before {
+    content: "•";
+    color: #8a8987;
+    font-size: 18px;
+    position: absolute;
+    left: 0;   /* ← coloca el punto correctamente */
+    top: 0;
+}
 
 
     </style>
@@ -1276,6 +1314,23 @@
                                             <br><strong>Presentación:</strong> Botella elegante de 750ml con diseño exclusivo
                                             <br><strong>Graduación:</strong> 40% vol.
                     </p>
+                    <div class="product-varieties">
+                <h4><strong>Variedades y Bodegas</strong></h4>
+                <p><strong>Pisco Italia – Torre de la Gala</strong><br>
+                           La Joya, Arequipa</p>
+                <p><strong>Pisco Italia – Finca Maravilla</strong><br>
+                           Tacna</p>
+                <p><strong>Pisco Mollar – Torre de la Gala</strong><br>
+                           La Joya, Arequipa</p>
+                <p><strong>Pisco Italia – Sol Aparcana</strong><br>
+                           Santiago, Ica</p>
+                <p><strong>Pisco Torontel – Sol Aparcana</strong><br>
+                           Santiago, Ica</p>
+                <p><strong>Pisco Albilla – Sol Aparcana</strong><br>
+                           Pisco, Ica</p>
+                <p><strong>Pisco Negra Criolla – Parras y Reyes</strong><br>
+                           Moquegua</p>
+            </div>
                     <p class="product-price">S/250.00</p>
                     <div class="quantity-controls">
                         <button class="qty-btn" onclick="decreaseQty(15)">
@@ -1313,12 +1368,16 @@
                     <p class="product-price">Elige tu presentación:</p>
                     <div style="display: flex; flex-direction: column; gap: 6px; margin: 8px 0;">
                         <label class="radio-option">
+                            <input type="radio" name="vinagre-option" value="100ml" data-price="20.00">
+                            <span>100 ml - S/20.00</span>
+                        </label>
+                        <label class="radio-option">
                             <input type="radio" name="vinagre-option" value="500ml" data-price="35.00">
                             <span>500 ml - S/35.00</span>
                         </label>
                         <label class="radio-option">
-                            <input type="radio" name="vinagre-option" value="4l" data-price="120.00">
-                            <span>4 L - S/120.00</span>
+                            <input type="radio" name="vinagre-option" value="4l" data-price="150.00">
+                            <span>4 L - S/150.00</span>
                         </label>
                     </div>
                     <button class="add-to-cart-btn" onclick="addToCartVinagre()">
@@ -1450,9 +1509,8 @@
         <div class="product-row dark">
             <div class="product-content">
                 <div class="product-image-cell">
-                    <img src="ol.png" alt="aceite de oliva" class="product-image" onclick="openZoom(this.src)">
-                    <img src="oliva.jpg" alt="aceite de oliva" class="product-image" onclick="openZoom(this.src)">
-                    <img src="aceite5.jpg" alt="aceite de oliva" class="product-image" onclick="openZoom(this.src)">
+                    <img src="oliva500.png" alt="aceite de oliva" class="product-image" onclick="openZoom(this.src)">
+                    <img src="oliva5lt.png" alt="aceite de oliva" class="product-image" onclick="openZoom(this.src)">
                 </div>
                 <div class="product-text">
                     <h4 class="product-name"><strong>ACEITE DE OLIVA EXTRA VIRGEN</strong></h4>
@@ -1474,12 +1532,16 @@
                     <p class="product-price">Elige tu presentación:</p>
                     <div style="display: flex; flex-direction: column; gap: 6px; margin: 8px 0;color:white">
                         <label class="radio-option">
+                            <input type="radio" name="aceite-oliva-option" value="250ml" data-price="35.00">
+                            <span>250 ml - S/ consultar</span>
+                        </label>
+                        <label class="radio-option">
                             <input type="radio" name="aceite-oliva-option" value="500ml" data-price="35.00">
-                            <span>500 ml - S/ 35.00</span>
+                            <span>500 ml - S/ consultar</span>
                         </label>
                         <label class="radio-option">
                             <input type="radio" name="aceite-oliva-option" value="4l" data-price="120.00">
-                            <span>4 L - S/ 120.00</span>
+                            <span>5 L - S/ consultar</span>
                         </label>
                     </div>
                     <button class="add-to-cart-btn" onclick="addToCartAceiteOliva()">
@@ -1509,24 +1571,25 @@
                                             <br><strong>Sabor:</strong> Natural, suave y consistente
                                             <br><strong>Valor agregado:</strong> Mezcla selecta de los mejores granos del norte del Perú
                     </p>
-                    <p class="product-price">S/. 100.00</p>
-                    <div class="quantity-controls">
-                        <button class="qty-btn" onclick="decreaseQty(9)">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                        <div class="qty-display" id="qty-9">1</div>
-                        <button class="qty-btn" onclick="increaseQty(9)">
-                            <i class="fas fa-plus"></i>
-                        </button>
+                    <p class="product-price">Elige tu presentación:</p>
+                    <div style="display: flex; flex-direction: column; gap: 6px; margin: 8px 0;">
+                        <label class="radio-option">
+                            <input type="radio" name="arroz-conde-option" value="1kg" data-price="10.00">
+                            <span>1 kg - S/10.00</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="arroz-conde-option" value="5kg" data-price="100.00">
+                            <span>5 kg - S/50.00</span>
+                        </label>
                     </div>
-                    <button class="add-to-cart-btn" onclick="addToCart('Arroz Del Conde', 100.00, 9, 'arroz_el_conde.png')">
+                    <button class="add-to-cart-btn" onclick="addToCartArrozConde()">
                         Añadir al Carrito
                     </button>
                 </div>
                 <div class="product-image-cell">
                     <img src="granos_de_arroz.jpg" alt="granos de arroces" class="product-image" onclick="openZoom(this.src)">
-                    <img src="arroz_el_conde.png" alt="arroz del conde" class="product-image" onclick="openZoom(this.src)">
-                    <img src="arroz_preparacion.jpeg" alt="arroz preparacíon" class="product-image" onclick="openZoom(this.src)">
+                    <img src="arrozdelconde5.png" alt="arroz del conde" class="product-image" onclick="openZoom(this.src)">
+                    <img src="arrozdelconde50.png" alt="arroz preparacíon" class="product-image" onclick="openZoom(this.src)">
                 </div>
             </div>
         </div>
@@ -1591,7 +1654,7 @@
                                             <br>Nuestro cabrito lleva consigo la esencia del campo norteño, el respeto por la naturaleza y el orgullo de nuestras raíces. Es un tributo al Perú rural, a sus sabores auténticos y a la cocina que trasciende generaciones.
                                             Del rancho a tu mesa, con origen, historia y nobleza.
                     </p>
-                    <p class="product-price">S/ 40.00</p>
+                    <p class="product-price">S/ consultar</p>
                     <div class="quantity-controls">
                         <button class="qty-btn" onclick="decreaseQty(11)">
                             <i class="fas fa-minus"></i>
@@ -1601,7 +1664,7 @@
                             <i class="fas fa-plus"></i>
                         </button>
                     </div>
-                    <button class="add-to-cart-btn" onclick="addToCart('Cabrito', 40.00, 11, 'cabrito.jpeg')">
+                    <button class="add-to-cart-btn" onclick="addToCart('Cabrito', consultar, 11, 'cabrito.jpeg')">
                         Añadir al Carrito
                     </button>
                 </div>
@@ -1633,7 +1696,7 @@
                                             <br><strong>Uso gastronómico:</strong> Ideal para platos típicos del norte como arroz con pato, seco o guisos regionales.
                                             <br><strong>Valor agregado:</strong> Producto artesanal de denominación local y calidad premium.                          
                     </p>
-                    <p class="product-price">S/ 80.00</p>
+                    <p class="product-price">S/ 60.00</p>
                     <div class="quantity-controls">
                         <button class="qty-btn" onclick="decreaseQty(10)">
                             <i class="fas fa-minus"></i>
@@ -1643,7 +1706,7 @@
                             <i class="fas fa-plus"></i>
                         </button>
                     </div>
-                    <button class="add-to-cart-btn" onclick="addToCart('Pato Mochata', 80.00, 10, 'pato_mochata.jpg')">
+                    <button class="add-to-cart-btn" onclick="addToCart('Pato Mochata', 60.00, 10, 'pato_mochata.jpg')">
                         Añadir al Carrito
                     </button>
                 </div>
@@ -1672,7 +1735,7 @@
                                             <br><strong>Preparación tradicional:</strong>Preparación tradicional: El pescado seco se remoja para ablandarlo, se deshilacha y se mezcla con jugo de limón, ají limo, cebolla y sal.
                                             <br><strong>Valor cultural:</strong> Representa la cocina ancestral lambayecana, combinando la tradición pesquera con los sabores criollos del norte del Perú.
                     </p>
-                    <p class="product-price">S/ 40.00</p>
+                    <p class="product-price">S/ consultar</p>
                     <div class="quantity-controls">
                         <button class="qty-btn" onclick="decreaseQty(13)">
                             <i class="fas fa-minus"></i>
@@ -1682,7 +1745,7 @@
                             <i class="fas fa-plus"></i>
                         </button>
                     </div>
-                    <button class="add-to-cart-btn" onclick="addToCart('Chinguirito KG', 40.00, 13, 'guitarra1.jpeg')">
+                    <button class="add-to-cart-btn" onclick="addToCart('Chinguirito KG', consultar, 13, 'guitarra1.jpeg')">
                         Añadir al Carrito
                     </button>
                 </div>
@@ -1712,7 +1775,7 @@
                     <br>Estos ajíes, reconocidos por chefs y cocineros tradicionales, son el alma del sabor del norte peruano, indispensables en cebiches, aderezos, guisos, sopas y platos emblemáticos como el seco, arroz norteño y marinados criollos.
                     <br><strong>En el Rancho del Conde</strong> cosechamos con respeto, pasión y orgullo por nuestra herencia agrícola, ofreciendo un producto 100% natural, de origen controlado y con la pureza y fuerza del valle lambayecano.                          
                     </p>
-                    <p class="product-price">S/. 25.00</p>
+                    <p class="product-price">S/ consultar</p>
                     <div class="quantity-controls">
                         <button class="qty-btn" onclick="decreaseQty(14)">
                             <i class="fas fa-minus"></i>
@@ -1722,7 +1785,7 @@
                             <i class="fas fa-plus"></i>
                         </button>
                     </div>
-                    <button class="add-to-cart-btn" onclick="addToCart('Variedad de ajies', 25.00, 14, 'ajis.jpeg')">
+                    <button class="add-to-cart-btn" onclick="addToCart('Variedad de ajies', consultar, 14, 'ajis.jpeg')">
                         Añadir al Carrito
                     </button>
                 </div>
@@ -1888,15 +1951,20 @@
         }
         
         function addToCartVinagre() {
-            if (!currentUser) { alert('Debes registrarte primero...'); showAuthModal(); return; }
+            if (!currentUser) { alert('Debes registrarte primero...');showAuthModal(); return; }
             const selected = document.querySelector('input[name="vinagre-option"]:checked');
             if (!selected) { alert('Elige una presentación.'); return; }
-            const size = selected.value === '500ml' ? '500 ml' : '4 L';
+            const sizeMap = {'100ml': '100 ml','500ml': '500 ml','4l': '4 L'};
+            const imageMap = {'100ml': 'IMAGEN_100ml.jpeg', '500ml': 'VINAGRE DANDY (1).jpeg','4l': 'DJ VINAGRE DANDY (1).jpeg'};
+            const size = sizeMap[selected.value];
             const price = parseFloat(selected.dataset.price);
             const name = `Vinagre El Dandy – ${size}`;
-            const image = 'VINAGRE DANDY (1).jpeg';
-            addToCartGeneric(name, price, 1, image);
-        }
+            const image = imageMap[selected.value];
+            const image1 = image; 
+            addToCartGeneric(name, price, 1, image, image1);
+    }
+
+
         
         function addToCartJoraNatural() {
             if (!currentUser) { alert('Debes registrarte primero...'); showAuthModal(); return; }
@@ -1939,6 +2007,16 @@
             const price = parseFloat(selected.dataset.price);
             const name = `Aceite de Oliva Extra Virgen – ${size}`;
             const image = 'ol.png';
+            addToCartGeneric(name, price, 1, image);
+        }
+        function addToCartArrozConde() {
+            if (!currentUser) { alert('Debes registrarte primero...'); showAuthModal(); return; }
+            const selected = document.querySelector('input[name="arroz-conde-option"]:checked');
+            if (!selected) { alert('Elige una presentación.'); return; }
+            const size = selected.value === '1kg' ? '1 kg' : '5 kg';
+            const price = parseFloat(selected.dataset.price);
+            const name = `Arroz del Conde – ${size}`;
+            const image = 'arrozdelconde5.png';
             addToCartGeneric(name, price, 1, image);
         }
         
