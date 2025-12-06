@@ -2160,31 +2160,26 @@
                 return;
             }
             
-            let message = `*Nuevo Pedido - Chakupe*%0A%0A`;
-            message += `*Cliente:* ${currentUser.name}%0A`;
-            message += `*Email:* ${currentUser.email}%0A`;
-            message += `*DNI:* ${currentUser.dni}%0A`;
-            message += `*Celular:* ${currentUser.phone}%0A%0A`;
-            message += `*Productos:*%0A`;
-            
-            let total = 0;
-            cart.forEach((item) => {
-                const itemTotal = item.price * item.quantity;
-                message += `${item.quantity} x ${item.name} - S/. ${itemTotal.toFixed(2)}%0A`;
-                total += itemTotal;
-            });
-            
-            message += `%0A*Total: S/. ${total.toFixed(2)}*`;
-            
-            const whatsappNumber = '51927743956';
-            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, '_blank');
-            
-            cart = [];
-            updateCartBadge();
-            closeCart();
-            alert('Pedido enviado por WhatsApp. ¡Gracias por tu compra!');
-        }
+           let message = `*Nuevo Pedido - Chakupe*\n\n`;
+           message += `*Cliente:* ${currentUser.name}\n`;
+           message += `*Email:* ${currentUser.email}\n`;
+           message += `*DNI:* ${currentUser.dni}\n`;
+           message += `*Celular:* ${currentUser.phone}\n\n`;
+           message += `*Productos:*\n`;
+           let total = 0;
+           cart.forEach((item) => {
+           const itemTotal = item.price * item.quantity;
+           message += `${item.quantity} x ${item.name} - S/. ${itemTotal.toFixed(2)}\n`;
+           total += itemTotal;
+   });
+          message += `\n*Total: S/. ${total.toFixed(2)}*`;
+          const whatsappNumber = '51927743956';
+          const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+          window.open(whatsappUrl, '_blank');
+          cart = [];
+          updateCartBadge();
+          closeCart();
+          alert('Pedido enviado por WhatsApp. ¡Gracias por tu compra!');}
     </script>
 </body>
 </html>
